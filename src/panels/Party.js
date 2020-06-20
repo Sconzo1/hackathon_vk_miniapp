@@ -21,7 +21,7 @@ const Party = ({ id, go, fetchedUser }) => (
 				style = {HeadStyle.Avatar}
 				status="14 человек"
 				before={<Avatar size={50} src={persik}/>}>
-				На шашлыки
+				На шашлыки 
 			</PanelHeaderContent>
 		</PanelHeader>
 		
