@@ -1,3 +1,3 @@
-# FFF
+# Псы да Лисы
 
-Start
+Кейс - VK Mini Apps
