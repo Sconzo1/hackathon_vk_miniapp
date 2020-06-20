@@ -8,26 +8,63 @@ import Cell from '@vkontakte/vkui/dist/components/Cell/Cell';
 import Div from '@vkontakte/vkui/dist/components/Div/Div';
 import Avatar from '@vkontakte/vkui/dist/components/Avatar/Avatar';
 
+import head from './head'
+
+import Meeting from './Meeting';
+
+import persik from '../img/persik.png';
+import family from '../img/Family.jpg';
+
+
 const Home = ({ id, go, fetchedUser }) => (
-	<Panel id={id}>
-		<PanelHeader>Example</PanelHeader>
+	<Panel id={id} style={head.Panel}>
+		<PanelHeader>FFF</PanelHeader>
 		{fetchedUser &&
-		<Group title="User Data Fetched with VK Bridge">
+		<Group 
+			style = {head.Group}
+			title="User Data Fetched with VK Bridge">
 			<Cell
-				before={fetchedUser.photo_200 ? <Avatar src={fetchedUser.photo_200}/> : null}
+				before={fetchedUser.photo_200 ? <Avatar size={65} src={fetchedUser.photo_200}/> : null}
 				description={fetchedUser.city && fetchedUser.city.title ? fetchedUser.city.title : ''}
 			>
-				{`${fetchedUser.first_name} ${fetchedUser.last_name}`}
+				<p style={head.p}>{`Здравствуйте,`} <br/>{`${fetchedUser.first_name}!`}</p>
 			</Cell>
 		</Group>}
 
+		<Group 
+			style = {head.Group}
+			title="My friends' hangouts">			
+			<Cell style={{marginRight: "0%"}}>
+            	<label>Мероприятия друзей</label>		
+				<Meeting 
+					title="На шашлыки" 
+					picture = {family}
+					date={'22.04'} 
+					time={'14:00'} 
+					num = {'11'}
+					fetchedUser={fetchedUser}/>
+				
+				<Meeting 
+					title="Романтика" 
+					picture = {persik}
+					date={'14.04'} 
+					time={'22:50'} 
+					num = {'23'}
+					fetchedUser={fetchedUser}/>
+			</Cell>
+		</Group>
+
+
 		<Group title="Navigation Example">
 			<Div>
-				<Button size="xl" level="2" onClick={go} data-to="persik">
-					Show me the Persik, please
+				<Button mode="secondary" size="xl" level="2" onClick={go} data-to="meetingsList">
+					Создать комнату
+				</Button>
+				<Button mode="tertiary" size="xl" level="2" onClick={go} data-to="persik">
+					Присоединиться к VIP
 				</Button>
 			</Div>
-		</Group>
+		</Group> 
 	</Panel>
 );
 
