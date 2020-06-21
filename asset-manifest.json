@@ -1,0 +1,28 @@
+{
+  "files": {
+    "main.js": "./static/js/main.e2e45f6f.chunk.js",
+    "main.js.map": "./static/js/main.e2e45f6f.chunk.js.map",
+    "runtime-main.js": "./static/js/runtime-main.7f5553f8.js",
+    "runtime-main.js.map": "./static/js/runtime-main.7f5553f8.js.map",
+    "static/css/2.6bab1db4.chunk.css": "./static/css/2.6bab1db4.chunk.css",
+    "static/js/2.8949f492.chunk.js": "./static/js/2.8949f492.chunk.js",
+    "static/js/2.8949f492.chunk.js.map": "./static/js/2.8949f492.chunk.js.map",
+    "index.html": "./index.html",
+    "precache-manifest.315ff33e110a0a3416db2f6d4c5f0a46.js": "./precache-manifest.315ff33e110a0a3416db2f6d4c5f0a46.js",
+    "service-worker.js": "./service-worker.js",
+    "static/css/2.6bab1db4.chunk.css.map": "./static/css/2.6bab1db4.chunk.css.map",
+    "static/js/2.8949f492.chunk.js.LICENSE.txt": "./static/js/2.8949f492.chunk.js.LICENSE.txt",
+    "static/media/Buzza.jpg": "./static/media/Buzza.f6494a4a.jpg",
+    "static/media/Funchoza.jpg": "./static/media/Funchoza.13ecb012.jpg",
+    "static/media/Oreo.jpg": "./static/media/Oreo.d5c4e89d.jpg",
+    "static/media/Pancake.jpg": "./static/media/Pancake.5abcaaf6.jpg",
+    "static/media/Pig.jpg": "./static/media/Pig.0a82b2c2.jpg",
+    "static/media/RedSea.jpg": "./static/media/RedSea.bcbe3ba2.jpg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.7f5553f8.js",
+    "static/css/2.6bab1db4.chunk.css",
+    "static/js/2.8949f492.chunk.js",
+    "static/js/main.e2e45f6f.chunk.js"
+  ]
+}
