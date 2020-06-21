@@ -14,27 +14,28 @@ import friends from './data/Friends';
 
 
 
-const DEFAULT_MEETING = {
-	avatar: '',
-	title: 'ДР Лехи',
-	type: 'Вечеринка',
-	sum: '6500',
-	date: 'Вчера в 14:88'
-}
+// const DEFAULT_MEETING = {
+// 	avatar: '',
+// 	title: 'ДР Лехи',
+// 	type: 'Вечеринка',
+// 	sum: '6500',
+// 	date: 'Вчера в 14:88'
+// }
 
 
 const App = () => {
 	const [activePanel, setActivePanel] = useState('checkGoods');   
 	const [fetchedUser, setUser] = useState(null);
 	const [popout, setPopout] = useState(<ScreenSpinner size='large' />);
-	const [meetings, setMeetings] = useState(null);
-	const [creators, setCreators] = useState(null);
+	// const [meetings, setMeetings] = useState(null);
+	// const [creators, setCreators] = useState(null);
 	const [AVAILABLE_INGRIDIENTS, setAVAILABLE_INGRIDIENTS] = useState([]);
 	const [token, setToken] = useState(null);
-	const [myFriends, setFriends] = useState(null);
+	// const [myFriends, setFriends] = useState(null);
 	const [recipeID, setRecipeID] = useState(null);
 
 	const [friendIngridients, setFriendIngridients] = useState(friends);
+	const [nextUser, setNextUser] = useState(null);
 
 	useEffect(() => {
 		bridge.subscribe(({ detail: { type, data }}) => {
@@ -48,29 +49,25 @@ const App = () => {
 			const user = await bridge.send('VKWebAppGetUserInfo');
 			setUser(user);
 			setPopout(null);
-			setCreators(user);
-			setMeetings({
-
-			})
 		}
-		async function init() {
-			bridge.send("VKWebAppInit", {})
-				.then(data => {
-					console.log("VKWebAppInit - Ready");
-					fetchData();
-				})
-				.catch(e => console.log(e));
-		}
+		// async function init() {
+		// 	bridge.send("VKWebAppInit", {})
+		// 		.then(data => {
+		// 			console.log("VKWebAppInit - Ready");
+		// 			fetchData();
+		// 		})
+		// 		.catch(e => console.log(e));
+		// }
 
 		async function getToken() {
 			bridge.send("VKWebAppGetAuthToken", {"app_id":7511047, "scope":"friends"})
 								.then(data => {
 									setToken(data.access_token);
-								}).
-								catch(e => console.log(e));
+								})
+								.catch(e => console.log(e));
 		}
 
-		init();
+		fetchData();
 		getToken();
 	}, []);
 
@@ -83,7 +80,7 @@ const App = () => {
 				{"method": "friends.get", "params": {"user_id": fetchedUser.id, "v":"5.110",
 				"count":"5", "fields":"name, photo_100", "order":"name", "access_token":token}})
 				.then(data => {
-					setFriends(data.response.items);
+					// setFriends(data.response.items);
 					// console.log(data.response.items);
 					// 
 					let t_friendIngridients = friendIngridients.map((frIng, i) => ({...frIng, "USER": data.response.items[i]}));
@@ -106,10 +103,10 @@ const App = () => {
 
 	return (
 		<View activePanel={activePanel} popout={popout}>
-			<IngridientsCheck id='checkGoods' go={go} receptList={recipes} setAvailableIngridients={setAVAILABLE_INGRIDIENTS} />
-			<RecipePage id='recipePage' go={go} friendIngridients={friendIngridients} recipeID={recipeID}/>
-			<HomePage id='homePage' fetchedUser={fetchedUser} go={go} setRecipeID={setRecipeID}/>
-			<FoodPartner id='foodPartner' go={go} fetchedUser={fetchedUser} availableIngridient={AVAILABLE_INGRIDIENTS} recipelist={recipes} recipeID={recipeID} />
+			<IngridientsCheck id='checkGoods' go={go} receptList={recipes} availableIngridients={AVAILABLE_INGRIDIENTS} setAvailableIngridients={setAVAILABLE_INGRIDIENTS} />
+			<RecipePage id='recipePage' go={go} friendIngridients={friendIngridients} recipeID={recipeID} setNextUser={setNextUser}/>
+			<HomePage id='homePage' fetchedUser={fetchedUser} go={go} setRecipeID={setRecipeID} />
+			<FoodPartner id='foodPartner' go={go} fetchedUser={fetchedUser} nextUser={nextUser} availableIngridient={AVAILABLE_INGRIDIENTS} recipelist={recipes} recipeID={recipeID} />
 		</View>
 	);
 }

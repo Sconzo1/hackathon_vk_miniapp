@@ -1,27 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { platform, IOS, Panel, PanelHeader, Header, Group, Cell, Div, PanelHeaderButton, Avatar, Button } from '@vkontakte/vkui';
+import { platform, IOS, Panel, PanelHeader, Header, Group, Cell, Div, PanelHeaderButton, Avatar, Button, Radio } from '@vkontakte/vkui';
 
-import Icon16Fire from '@vkontakte/icons/dist/16/fire';
 import Icon28ChevronBack from '@vkontakte/icons/dist/28/chevron_back';
 import Icon24Back from '@vkontakte/icons/dist/24/back';
-import Icon16CheckCircle from '@vkontakte/icons/dist/16/check_circle';
-
+// import Icon16CheckCircle from '@vkontakte/icons/dist/16/check_circle';
+import Icon16User from '@vkontakte/icons/dist/16/user';
+ 
 import colors from '../data/colors';
-
-function getRandomColor() {
-    var letters = '0123456789ABCDEF';
-    var color = '#';
-    for (var i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-  }
 
 const osName = platform();
 
 const head ={
-	Panel: {
+	Panel: { 
 		display: "flex",
 		alignItems: "center",
 		alignContent: "center"
@@ -51,7 +42,7 @@ const head ={
 	}
 }
 
-const RecipePage = ({ id, go, friendIngridients, recipeID }) => {
+const RecipePage = ({ id, go, friendIngridients, recipeID, setNextUser }) => {
     const data = recipeID.PRODUCTS;
     const ingredients = Object.keys(data);
 
@@ -65,7 +56,10 @@ const RecipePage = ({ id, go, friendIngridients, recipeID }) => {
                             "fullName_Text": `${USER.first_name + " " + USER.last_name}`,
                             "color_Hex": colors[i % colors.length],
                             "photo_100_Avatar": temp_photo,
-                            "needIngredients_Array": INGRIDIENTS.filter(v => ingredients.includes(v))
+                            "photo_200": USER.photo_100,
+                            "first_name": USER.first_name,
+                            "needIngredients_Array": INGRIDIENTS.filter(v => ingredients.includes(v)),
+                            "description": `${"Может добавить: " + INGRIDIENTS.filter(v => ingredients.includes(v))}`
                         } )
                     });
 
@@ -91,7 +85,7 @@ const RecipePage = ({ id, go, friendIngridients, recipeID }) => {
         return (<Cell 
             style={{margin: "-20px", padding: "-20px"}}
             key = {i}
-            before={<Icon16CheckCircle style={{color: t_color}}/>}
+            before={<Icon16User style={{color: t_color}}/>}
             asideContent= {data[ingred]}>
             {ingred} 
         </Cell>)
@@ -108,10 +102,12 @@ const RecipePage = ({ id, go, friendIngridients, recipeID }) => {
     });
 
 
-    const listFriends = updatedFriendIngridients.map(data => 
+    const listFriends = updatedFriendIngridients.map((data, i) => 
                             <Cell
                             key={data.fullName_Text}
                             before={data.photo_100_Avatar}
+                            description={data.description}
+                            asideContent={<Radio name="radio" value={i} onClick={() => setNextUser(data)}/>}
                             >
                                 {`${data.fullName_Text}`}
                             </Cell>)
@@ -133,7 +129,7 @@ const RecipePage = ({ id, go, friendIngridients, recipeID }) => {
             
             <Div style={head.Div}>
                 <Div style = {{width: "90%"}}>
-                    <p style={head.p}>Ингридиенты:</p>
+                    <p style={head.p}>Ингредиенты:</p>
                     <br />
                     {listIngredients}
                     <br />

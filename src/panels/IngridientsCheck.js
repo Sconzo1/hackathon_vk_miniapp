@@ -1,8 +1,7 @@
-import React from 'react';
-import { element } from 'prop-types';
+import React, {useState} from 'react';
 import {Panel, Cell, Group, FixedLayout, Div, PanelHeader, List, Button} from '@vkontakte/vkui';
 
-const IngridientsCheck = ({id, go, receptList, setAvailableIngridients}) => {
+const IngridientsCheck = ({id, go, receptList, availableIngridients, setAvailableIngridients}) => {
 
     let goods = [];
     receptList.forEach(element => {
@@ -12,14 +11,14 @@ const IngridientsCheck = ({id, go, receptList, setAvailableIngridients}) => {
     });
     goods = [...new Set(goods)];
 
-    let available = [];
+    let [available, setAvailable] = useState(availableIngridients);
 
     function handleChange(event) {
         if (event.target.checked) {
-            available.push(event.target.id)
+            setAvailable(prevState => [...prevState, event.target.id]);
         } else {
-            if (available.indexOf(event.target.id != 1)) {
-                available.splice(available.indexOf(event.target.id), 1)
+            if (available.indexOf(event.target.id !== 1)) {
+                setAvailable(prevState => prevState.filter(t => (t !== event.target.id)))
             }
         }
     }
@@ -33,11 +32,12 @@ const IngridientsCheck = ({id, go, receptList, setAvailableIngridients}) => {
 
             <Group
             style={{paddingBottom: 45}} 
-            header={<Div mode="secondary">Ниже приведен список самых часто используемых в наших рецептах ингридентов. Попробуй вспомнить, какие из них имеются у тебя дома!</Div>}>
+            header={<Div mode="secondary">Ниже приведен список самых часто используемых в наших рецептах ингредиентов. Попробуй вспомнить, какие из них имеются у тебя дома!</Div>}>
                 <List id='ingridients-list'>
                     {
                     goods.map((good, i) => 
-                        <Cell 
+                        <Cell
+                            checked={available.includes(good) ? true : false}
                             selectable 
                             onChange={(e) => {
                                 handleChange(e)
@@ -58,6 +58,7 @@ const IngridientsCheck = ({id, go, receptList, setAvailableIngridients}) => {
                     mode="commerce" 
                     data-to='homePage'
                     onClick={(e) => {
+                        console.log(available);
                         setAvailableIngridients(available);
                         go(e)
                     }}                     

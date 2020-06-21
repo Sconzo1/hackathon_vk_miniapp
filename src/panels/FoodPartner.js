@@ -27,7 +27,7 @@ const styles ={
     }
 }
 
-const FoodPartner = ({ id, go, fetchedUser, availableIngridient, recipelist, recipeID }) => {
+const FoodPartner = ({ id, go, fetchedUser, availableIngridient, recipelist, recipeID, nextUser}) => {
 
     let currentRecipe = [];
     recipelist.forEach(element => {
@@ -81,19 +81,17 @@ const FoodPartner = ({ id, go, fetchedUser, availableIngridient, recipelist, rec
                 title="My Friend"
                 style={{margin: "0%",  padding: "0%"}}>
 
-                <Cell style={{margin: "10%", marginTop: "0%", padding: "0%"}}
-                    before={<Avatar size={70} description='олололо' src={fetchedUser.photo_200}/>}
-                    asideContent = {<Avatar size={70} src={fetchedUser.photo_200}></Avatar>}>
+                <Cell style={{margin: "5%", marginTop: "0%", padding: "0%"}}
+                    before={<Avatar size={70} description='олололо' src={fetchedUser.photo_200}><p style={{marginTop: '6.2rem'}}>{fetchedUser.first_name}</p></Avatar>}
+                    asideContent = {<Avatar size={70} src={nextUser.photo_200}><p style={{marginTop: '6.2rem'}}>{nextUser.first_name}</p></Avatar>}>
                         <Div>
-                            <p style={styles.p}></p>
-                            <p style={styles.p}>{<Icon56GoodsCollection/>}</p>
-                            <p style={styles.p}></p> 
+                            <p style={styles.p}>{<Icon56GoodsCollection/>}</p> 
                         </Div>
                 </Cell>
             </Group>
 
             <Group>
-                <IngridientsReview id='ingridients-list' requiredIngridients={requiredIngridients} availableIngridient={availableIngridient}/>
+                <IngridientsReview id='ingridients-list' nextUser={nextUser} requiredIngridients={requiredIngridients} availableIngridient={availableIngridient}/>
             </Group>
 
         </Panel>

@@ -2,8 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Panel, PanelHeader, Group, Cell, Avatar, Separator, Button} from '@vkontakte/vkui';
 
-import Icon28WriteOutline from '@vkontakte/icons/dist/28/write_outline';
-
 import recipes from '../data/Recipes'
 import BanerPage from '../components/BanerPage'
 
@@ -46,7 +44,7 @@ const HomePage = ({ id, go, fetchedUser, setRecipeID }) => {
             {fetchedUser &&
             <Group 
                 style = {head.Group}
-                title="User Data Fetched with VK Bridge">
+                title="My Profile">
                 <Cell
                     before={fetchedUser.photo_200 ? <Avatar size = {65} src={fetchedUser.photo_200}/> : null}
                     description={fetchedUser.city && fetchedUser.city.title ? fetchedUser.city.title : ''}
@@ -57,9 +55,9 @@ const HomePage = ({ id, go, fetchedUser, setRecipeID }) => {
 					size="xl" 
 					mode="secondary"
 					data-to="checkGoods"
-					onClick={(e) => go(e)}
+					onClick={go}
 					> 
-						{ <span role='img'>✏️ Редакторовать список продуктов</span> } 
+						{ <span role='img' aria-label="pencil">✏️ Редакторовать список продуктов</span> } 
 				</Button>
             </Group>}
             
