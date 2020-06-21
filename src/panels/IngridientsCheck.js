@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
-import Icon28ChevronBack from '@vkontakte/icons/dist/28/chevron_back';
-import {Panel, Cell, Group, FixedLayout, Div, PanelHeaderButton, PanelHeader, List, Button} from '@vkontakte/vkui';
+import React from 'react';
+import { element } from 'prop-types';
+import {Panel, Cell, Group, FixedLayout, Div, PanelHeader, List, Button} from '@vkontakte/vkui';
 
 const IngridientsCheck = ({id, go, receptList, setAvailableIngridients}) => {
 
@@ -26,12 +26,13 @@ const IngridientsCheck = ({id, go, receptList, setAvailableIngridients}) => {
 
     return(
         <Panel id={id}>
+
             <PanelHeader>
                 Привет!
             </PanelHeader>
-            <Div> 
+
             <Group
-            //style={{paddingBottom: 45}} 
+            style={{paddingBottom: 45}} 
             header={<Div mode="secondary">Ниже приведен список самых часто используемых в наших рецептах ингридентов. Попробуй вспомнить, какие из них имеются у тебя дома!</Div>}>
                 <List id='ingridients-list'>
                     {
@@ -51,20 +52,19 @@ const IngridientsCheck = ({id, go, receptList, setAvailableIngridients}) => {
             </Group>
 
              
-                <FixedLayout vertical="bottom">
-                    <Button 
-                        size="xl" 
-                        mode="commerce" 
-                        data-to='home'
-                        onClick={(e) => {
-                            setAvailableIngridients(available);
-                            go(e)
-                        }}                     
-                    >
-                        Перейти к поиску рецепта
-                    </Button>
-                </FixedLayout>
-            </Div>  
+            <FixedLayout vertical="bottom">
+                <Button 
+                    size="xl" 
+                    mode="commerce" 
+                    data-to='homePage'
+                    onClick={(e) => {
+                        setAvailableIngridients(available);
+                        go(e)
+                    }}                     
+                >
+                    Перейти к поиску рецепта
+                </Button>
+            </FixedLayout>
         </Panel>
     )
 }

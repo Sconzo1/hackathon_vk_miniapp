@@ -1,73 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import bridge from '@vkontakte/vk-bridge';
-import View from '@vkontakte/vkui/dist/components/View/View';
-import ScreenSpinner from '@vkontakte/vkui/dist/components/ScreenSpinner/ScreenSpinner';
+import {View, ScreenSpinner} from '@vkontakte/vkui';
+
 import '@vkontakte/vkui/dist/vkui.css';
 
-import Home from './panels/Home';
-import MeetingList from './panels/MeetingList';
-import Party from './panels/Party';
+import RecipePage from './panels/RecipePage';
 import IngridientsCheck from './panels/IngridientsCheck';
 import FoodPartner from './panels/FoodPartner';
+import HomePage from './panels/HomePage';
 
-import buzza from './img/Buzza.jpg';
-import pancake from './img/Pancake.jpg';
-import redsea from './img/RedSea.jpg';
-import funchoza from './img/Funchoza.jpg';
-import oreo from './img/Оreo.jpg';
+import recipes from './data/Recipes';
+import friends from './data/Friends';
 
 
-const recipes = [
-    {
-        ID: 1,
-        NAME: 'Буззы',
-        DESCRIPTION: 'Праздник у подруги',
-        IMG: {buzza},
-        TIME: '1 час',
-        PRODUCTS: {'Вода': '200 мл', 'Растительное масло': '1 Ст. ложка', 'Яйцо': '1шт',
-                    'Мука': '500 гр', 'Говядина': '700 гр.', 'Лук': '3 шт', 
-                    'Черный молотый перец': 'По вкусу', 'Соль': 'По вкусу'}
-    },
-    {
-        ID: 2,
-        NAME: 'Блины',
-        DESCRIPTION: 'На десерт',
-        IMG: {pancake},
-        TIME: '30 мин',
-        PRODUCTS: {'Мука': '75 гр', 'Молоко': '250 мл', 'Сливочное масло': '1 Ст. ложка', 
-                    'Яйцо': '1 шт', 'Сахар': '1 Ст. ложка', 'Ванилин': 'По вкусу'}
-    },
-    {
-        ID: 3,
-        NAME: 'Красное море',
-        DESCRIPTION: 'На скорую руку',
-        IMG: {redsea},
-        TIME: '10 мин',
-        PRODUCTS: {'Крабовые палочки': '250-300 гр', 'Помидоры': '1-2 шт', 'Сыр': '150 гр', 
-                    'Чеснок': '2 зубчика', 'Майонез': 'По вкусу', 'Соль': 'По вкусу'}
-    },
-    {
-        ID: 4,
-        NAME: 'Фунчоза',
-        DESCRIPTION: 'На праздник',
-        IMG: {funchoza},
-        TIME: '40 мин',
-        PRODUCTS: {'Курица': '400 гр', 'Лук': '1 шт', 'Морковь': '1 шт', 
-                    'Болгарский перец': '1 шт', 'Фунчоза':  '200 гр', 'Соевый соус': '',
-                    'Соль': 'По вкусу', 'Перец': 'По вкусу', 'Растительное масло': ''}
-    },
-    {
-        ID: 5,
-        NAME: 'Шоколадные печенья',
-        DESCRIPTION: 'Что-то сладкое',
-        IMG: {oreo},
-        TIME: '20 мин',
-        PRODUCTS: {'Масло сливочное': '115 гр', 'Молоко': '25 гр', 'Яйцо': '1 шт', 
-                   'Мука': '150 г', 'Какао-порошок': '50 гр', 'Сахар': '100 гр',
-                    'Сахар ванильный': '2 пакетика', 'Разрыхлитель': '5 гр', 'Пудра сахарная': '140 гр'}
-    },
-    
-]
 
 const DEFAULT_MEETING = {
 	avatar: '',
@@ -87,6 +32,9 @@ const App = () => {
 	const [AVAILABLE_INGRIDIENTS, setAVAILABLE_INGRIDIENTS] = useState([]);
 	const [token, setToken] = useState(null);
 	const [myFriends, setFriends] = useState(null);
+	const [recipeID, setRecipeID] = useState(null);
+
+	const [friendIngridients, setFriendIngridients] = useState(friends);
 
 	useEffect(() => {
 		bridge.subscribe(({ detail: { type, data }}) => {
@@ -133,10 +81,14 @@ const App = () => {
 		    	bridge
 				.send("VKWebAppCallAPIMethod",
 				{"method": "friends.get", "params": {"user_id": fetchedUser.id, "v":"5.110",
-				"count":"5", "fields":"name, photo_100", "order":"random", "access_token":token}})
+				"count":"5", "fields":"name, photo_100", "order":"name", "access_token":token}})
 				.then(data => {
-					setFriends(data.response);
-					// console.log(data.response);
+					setFriends(data.response.items);
+					// console.log(data.response.items);
+					// 
+					let t_friendIngridients = friendIngridients.map((frIng, i) => ({...frIng, "USER": data.response.items[i]}));
+					// console.log(t_friendIngridients);
+					setFriendIngridients(t_friendIngridients);
 				})
 				.catch(e => {
 					console.log(e);
@@ -155,10 +107,9 @@ const App = () => {
 	return (
 		<View activePanel={activePanel} popout={popout}>
 			<IngridientsCheck id='checkGoods' go={go} receptList={recipes} setAvailableIngridients={setAVAILABLE_INGRIDIENTS} />
-			<Home id='home' fetchedUser={fetchedUser} go={go} />
-			<MeetingList id='meetingsList' go={go} meetings={meetings} creators={creators} default_meeting={DEFAULT_MEETING} />
-			<Party id='party' go={go} fetchedUser={fetchedUser} />
-			<FoodPartner id='foodPartner' go={go} fetchedUser={fetchedUser} availableIngridient={AVAILABLE_INGRIDIENTS} recipelist={recipes} recipeID={1} />
+			<RecipePage id='recipePage' go={go} friendIngridients={friendIngridients} recipeID={recipeID}/>
+			<HomePage id='homePage' fetchedUser={fetchedUser} go={go} setRecipeID={setRecipeID}/>
+			<FoodPartner id='foodPartner' go={go} fetchedUser={fetchedUser} availableIngridient={AVAILABLE_INGRIDIENTS} recipelist={recipes} recipeID={recipeID} />
 		</View>
 	);
 }
